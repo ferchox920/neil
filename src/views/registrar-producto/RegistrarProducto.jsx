@@ -1,8 +1,10 @@
-import React from 'react'
+import React from "react";
+import  RegistrarProductoForm  from "../../components/registrar-producto_form/RegistrarProductoForm";
 
 export const RegistrarProductoView = () => {
   return (
-    <div>RegistrarProducto</div>
-  )
-}
-
+    <>
+      <RegistrarProductoForm />
+    </>
+  );
+};
