@@ -1,5 +1,4 @@
 export * from './404/NotFound'
-export * from './carrito/Carrito'
 export * from './detalle-producto/DetalleProducto'
 export * from './iniciar-sesion/IniciarSesion'
 export * from './inicio/Inicio'
