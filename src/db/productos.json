@@ -1,12 +1,12 @@
 [
-    {
-      "id": 1,
-      "nombre": "DreamCast",
-      "categoria": "ATARI",
-      "precio": 75000,
-      "img1": "dreamcast.png",
-      "img2": ""
-    },
+      {
+        "id": 1,
+        "nombre": "DreamCast",
+        "categoria": "ATARI",
+        "precio": 75000,
+        "img1": "dreamcast.png",
+        "imgs": ["dreamcast.png"]
+      },
     {
         "id": 2,
         "nombre": "DreamCast",

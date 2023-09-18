@@ -39,15 +39,6 @@ const RegistrarProductoForm = () => {
       <h2>Registrar Producto</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>ID:</label>
-          <input
-            type="text"
-            name="id"
-            value={product.id}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
           <label>Nombre:</label>
           <input
             type="text"
