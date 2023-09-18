@@ -1,62 +1,82 @@
-  import { createContext, useState, useEffect, useContext } from "react"
+import { createContext, useState, useEffect, useContext } from "react";
 
+// Crea un contexto de React llamado MarketplaceContext
+const MarketplaceContext = createContext({});
 
+// Define un componente funcional llamado MarketplaceProvider que recibe "children" como propiedad
+// eslint-disable-next-line react/prop-types
+export const MarketplaceProvider = ({ children }) => {
+  // Define varios estados usando el hook useState
+  const [productos, setProductos] = useState([]); // Estado para almacenar productos
+  const [categoria, setCategoria] = useState("all"); // Estado para la categoría actual
+  const [pageProductos, setPageProductos] = useState([]); // Estado para los productos a mostrar en la página
+  const [showLogin, setShowLogin] = useState(true); // Estado para mostrar/ocultar el inicio de sesión
+  const [showModal, setShowModal] = useState(true); // Estado para mostrar/ocultar un modal
+  const [car, setCar] = useState([]);
 
-  const MarketplaceContext = createContext({})
-
-  export const MarketplaceProvider = ({ children }) =>{
-    
-  const [productos, setProductos] = useState([]);
-  const [categoria, setCategoria] = useState('all')
-  const [pageProductos, setPageProductos] = useState([])
-  const [showLogin, setShowLogin] = useState(true);
-
+  // Utiliza el hook useEffect para cargar datos de productos cuando se monta el componente
   useEffect(() => {
-    async function fetchProductos() {
+    const fetchProductos = async () => {
       try {
-        const response = await fetch('http://localhost:3000/product');
+        const response = await fetch('src/db/productos.json');
         const data = await response.json();
         setProductos(data);
-        setPageProductos(data);
+        setPageProductos(data)
       } catch (error) {
-        console.error('Error en el fetch', error);
+        console.error("Error en el fetch", error); // Manejo de errores en caso de problemas con la solicitud
       }
-    }
-    
-    fetchProductos();
-  }, []);
+    };
 
+    fetchProductos(); // Llama a la función de carga de productos
+  }, []); // El segundo argumento vacío [] asegura que este efecto se ejecute solo una vez al montar el componente
 
-
+  // Utiliza useEffect para filtrar los productos en función de la categoría seleccionada
   useEffect(() => {
-    const filtrarProductos = ()=>{
-      if(categoria != 'all'){
-        const newProductos = productos.filter(producto=> producto.categoria === categoria)
-        setPageProductos(newProductos)
-      }else if(categoria === 'all'){
-        setPageProductos(productos)
+    const filtrarProductos = () => {
+      if (categoria !== "all") {
+        // Filtra los productos en base a la categoría seleccionada
+        const newProductos = productos.filter(
+          (producto) => producto.categoria === categoria
+        );
+        setPageProductos(newProductos); // Actualiza la lista de productos a mostrar
+      } else if (categoria === "all") {
+        setPageProductos(productos); // Si la categoría es 'all', muestra todos los productos
       }
-    } 
-    filtrarProductos()
-  }, [categoria, productos])
+    };
+    filtrarProductos(); // Llama a la función de filtrado de productos
+  }, [categoria, productos]); // El efecto se ejecutará cuando cambie la categoría o la lista de productos
 
+  // Crea un objeto globalState que contiene todos los estados y funciones relevantes
   const globalState = {
+    car,
+    setCar,
     productos,
     pageProductos,
     setPageProductos,
+    categoria,
     setCategoria,
     showLogin,
     setShowLogin,
+    showModal,
+    setShowModal,
   };
 
-          return (
-              <MarketplaceContext.Provider
-                value={globalState}
-              >
-                {children}
-              </MarketplaceContext.Provider>
-            );
-  
-  }
+  // Utiliza el contexto de React para proporcionar globalState a los componentes hijos
+  return (
+    <MarketplaceContext.Provider value={globalState}>
+      {children} {/* Renderiza los componentes hijos */}
+    </MarketplaceContext.Provider>
+  );
+};
 
-  export const useMarketplace = ()=> useContext(MarketplaceContext)
+// Define un hook personalizado llamado useMarketplace que permite acceder al contexto
+// eslint-disable-next-line react-refresh/only-export-components
+export const useMarketplace = () => {
+  const context = useContext(MarketplaceContext); // Obtiene el contexto de MarketplaceContext
+  if (!context) {
+    throw new Error(
+      "useMarketplace debe ser utilizado dentro de un MarketplaceProvider"
+    );
+  }
+  return context; // Devuelve el objeto globalState que contiene los estados y funciones
+};

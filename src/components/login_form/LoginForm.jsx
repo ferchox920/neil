@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import "./loginForm.scss";
 import { useState } from "react";
 import { useMarketplace } from "../../context";

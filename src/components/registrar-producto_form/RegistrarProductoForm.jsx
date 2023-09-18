@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 const RegistrarProductoForm = () => {
   const [product, setProduct] = useState({
