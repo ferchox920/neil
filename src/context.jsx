@@ -36,7 +36,7 @@ export const MarketplaceProvider = ({ children }) => {
       if (categoria !== "all") {
         // Filtra los productos en base a la categoría seleccionada
         const newProductos = productos.filter(
-          (producto) => producto.categoria === categoria
+          (producto) => producto.category === categoria
         );
         setPageProductos(newProductos); // Actualiza la lista de productos a mostrar
       } else if (categoria === "all") {
