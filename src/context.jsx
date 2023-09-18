@@ -18,7 +18,7 @@ export const MarketplaceProvider = ({ children }) => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await fetch('src/db/productos.json');
+        const response = await fetch('http://localhost:3000/product');
         const data = await response.json();
         setProductos(data);
         setPageProductos(data)
