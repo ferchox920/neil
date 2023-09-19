@@ -38,7 +38,7 @@ function App() {
             <Route path="/productos" element={<ProductosView />} />{" "}
             {/* Ruta para la vista de productos */}
             <Route
-              path="/porductos/:categoria/:producto"
+              path="/productos/:categoria/:producto"
               element={<DetalleProductoView />}
             />{" "}
             {/* Ruta dinámica para detalles del producto */}
