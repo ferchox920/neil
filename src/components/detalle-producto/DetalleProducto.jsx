@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export const DetalleProducto = () => {
-  const { producto } = useParams(); // Obtiene los parámetros de la URL
+  const {categoria, producto } = useParams(); // Obtiene los parámetros de la URL
   const [product, setProduct] = useState({});
 
   useEffect(() => {
@@ -22,14 +22,20 @@ export const DetalleProducto = () => {
     fetchProductoDetalle();
   }, [setProduct]);
   return (
-    <div>
+ 
+    <div >
+
       <h2>Detalle del Producto</h2>
       {product && (
-        <div>
-          <h3>Detalles del Producto</h3>
-          <img src={product.imageProfile} alt="asdas" srcset="" />
+         <div className="detalle-producto">
+          
+          <div className="logo-producto">
+          <img src={''} alt="Logo de la marca" srcset="" />
+          </div>
+          <div className="producto-info">
+          </div>
+          <h2 className="producto-nombre">{product.name}</h2>
 
-          <p>Nombre: {product.name}</p>
           <p>Precio: ${product.price}</p>
         </div>
       )}

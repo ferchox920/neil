@@ -1,0 +1,29 @@
+import React from 'react';
+import './DetalleProducto.scss';
+
+const DetalleProducto = () => {
+    return (
+        <div className="detalle-producto">
+            <div className="logo-producto">
+                <img
+                    src="https://www.pngjoy.com/pngm/150/3007703_snes-nintendo-64-logo-hd-png-download.png"
+                    alt="Logo de la marca"
+                />
+            </div>
+            <div className="producto-info">
+                <h2 className="producto-nombre">Nombre del producto</h2>
+                <p className="producto-descripcion">Descripción del producto Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam minima cum quae recusandae autem ad, reprehenderit molestiae. Ducimus animi a id, natus tempore adipisci, odio laborum eum molestiae eius esse....</p>
+                <div className="producto-imagen">
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/N64-Console-Set.png/150px-N64-Console-Set.png"
+                        alt="Producto"
+                    />
+                </div>
+                <p className="producto-precio"><big>Precio:</big> <strong>$</strong> 99.99</p>
+                <button className="agregar-carrito">Agregar al Carrito</button>
+            </div>
+        </div>
+    );
+};
+
+export default DetalleProducto;
