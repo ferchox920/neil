@@ -14,6 +14,7 @@ export const MarketplaceProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(true); // Estado para mostrar/ocultar un modal
   const [car, setCar] = useState([]);
 
+
   // Utiliza el hook useEffect para cargar datos de productos cuando se monta el componente
   useEffect(() => {
     const fetchProductos = async () => {
@@ -30,7 +31,7 @@ export const MarketplaceProvider = ({ children }) => {
     fetchProductos(); // Llama a la función de carga de productos
   }, []); // El segundo argumento vacío [] asegura que este efecto se ejecute solo una vez al montar el componente
 
-  // Utiliza useEffect para filtrar los productos en función de la categoría seleccionada
+
   useEffect(() => {
     const filtrarProductos = () => {
       if (categoria !== "all") {
@@ -46,6 +47,9 @@ export const MarketplaceProvider = ({ children }) => {
     filtrarProductos(); // Llama a la función de filtrado de productos
   }, [categoria, productos]); // El efecto se ejecutará cuando cambie la categoría o la lista de productos
 
+
+
+
   // Crea un objeto globalState que contiene todos los estados y funciones relevantes
   const globalState = {
     car,
@@ -59,6 +63,7 @@ export const MarketplaceProvider = ({ children }) => {
     setShowLogin,
     showModal,
     setShowModal,
+
   };
 
   // Utiliza el contexto de React para proporcionar globalState a los componentes hijos
