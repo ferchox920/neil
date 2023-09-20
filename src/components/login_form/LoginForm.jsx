@@ -15,37 +15,49 @@ export const LoginForm = () => {
     setShowLogin(false);
     handleClearFields();
   };
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !password) {
       setEmailError(!email);
       setPasswordError(!password);
       return;
     }
-
+  
     if (!/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       return;
     }
-
+  
     if (password.length < 6) {
       setPasswordError(true);
       return;
     }
-
+  
     try {
       const response = await axios.post("http://localhost:3000/auth/login", {
         email,
         password,
       });
-
+  
+ 
+      // Eliminar la data anterior del localStorage
+      localStorage.removeItem("token");
+  
+      // Guardar el nuevo token en el localStorage
+      localStorage.setItem("token", response.data.data.token);
+  
+      // Cerrar el modal y limpiar los campos
+      handleShowLogin();
+      handleClearFields();
+  
       console.log("Login successful:", response.data);
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+  
 
   const handleClearFields = () => {
     setEmail("");

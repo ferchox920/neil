@@ -1,112 +1,139 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import "./registrarUsuarioForm.scss";
-import { useState } from "react";
 import { useMarketplace } from "../../context";
 
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+const validatePassword = (password) => password.length >= 6;
+
 export const RegistrarUsuarioForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [formData, setFormData] = useState(initialState);
+  const [formErrors, setFormErrors] = useState({});
   const { setShowLogin } = useMarketplace();
 
-  //modifica el estado del contexto global
   const handleShowLogin = () => {
     setShowLogin(true);
     handleClearFields();
   };
 
-  const handleRegister = async (e) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setFormErrors({ ...formErrors, [name]: false });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password || !name) {
-      setEmailError(!email);
-      setPasswordError(!password);
-      return;
+    const { email, password, confirmPassword } = formData;
+
+    const errors = {};
+
+    if (!email) {
+      errors.email = true;
+    } else if (!validateEmail(email)) {
+      errors.email = true;
     }
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError(true);
-      return;
+    if (!password) {
+      errors.password = true;
+    } else if (!validatePassword(password)) {
+      errors.password = true;
     }
 
-    if (password.length < 6) {
-      setPasswordError(true);
-      return;
+    if (password !== confirmPassword) {
+      errors.confirmPassword = true;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/users/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+    setFormErrors(errors);
 
-      console.log("Registration successful:", response.data);
-    } catch (error) {
-      console.error("Registration failed:", error);
+    if (Object.keys(errors).length === 0) {
+      try {
+        const response = await axios.post("http://localhost:3000/user/", {
+          fullname: formData.name,
+          email:formData.email,
+          password:formData.password,
+        });
+
+        const { newUser, token } = response.data;
+
+        console.log("Registration successful:", newUser);
+        
+        // Guardar el token en localStorage
+        localStorage.setItem("token", token);
+      } catch (error) {
+        console.error("Registration failed:", error);
+      }
     }
   };
 
   const handleClearFields = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-    setEmailError(false);
-    setPasswordError(false);
+    setFormData(initialState);
+    setFormErrors({});
   };
+
+  const { email, password, confirmPassword } = formData;
 
   return (
     <div className="register">
       <form className="register-form">
         <p className="title-form">REGISTER</p>
-        <div className={`input-container ${emailError ? "error" : ""}`}>
+        <div className={`input-container ${formErrors.email ? "error" : ""}`}>
           <label>Email:</label>
           <input
             type="text"
+            name="email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailError(false);
-            }}
+            onChange={handleInputChange}
           />
-          {emailError && (
+          {formErrors.email && (
             <span className="error-message">Invalid email format</span>
           )}
         </div>
-        <div className={`input-container ${passwordError ? "error" : ""}`}>
+        <div className={`input-container ${formErrors.password ? "error" : ""}`}>
           <label>Password:</label>
           <input
             type="password"
+            name="password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordError(false);
-            }}
+            onChange={handleInputChange}
           />
-          {passwordError && (
+          {formErrors.password && (
             <span className="error-message">
               Password must be at least 6 characters
             </span>
+          )}
+        </div>
+        <div className={`input-container ${formErrors.confirmPassword ? "error" : ""}`}>
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={handleInputChange}
+          />
+          {formErrors.confirmPassword && (
+            <span className="error-message">Passwords do not match</span>
           )}
         </div>
         <div className="input-container">
           <label>Name:</label>
           <input
             type="text"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
           />
         </div>
         <div className="btn-container">
-          <button onClick={handleRegister} className="register-btn" />
+          <button onClick={handleSubmit} className="register-btn" />
           <button
             type="button"
             onClick={handleClearFields}
